@@ -40,22 +40,22 @@ export class SoWeSign {
       if (!this.temporaryToken) {
         return 'Invalid temporary token';
       }
-      const studentsResponse: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
+      const response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
         headers: { Authorization: this.temporaryToken },
       });
       let students: SoWeSignStudent[] = [];
-      if (studentsResponse.data) {
-        students = studentsResponse.data as SoWeSignStudent[];
+      if (response.data) {
+        students = response.data as SoWeSignStudent[];
         return students;
       } else {
         await this.getTemporaryToken();
         await wait(1000 * 5);
-        const studentsResponse: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
+        const response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
           headers: { Authorization: this.temporaryToken },
         });
         let students: SoWeSignStudent[] = [];
-        if (studentsResponse.data) {
-          students = studentsResponse.data as SoWeSignStudent[];
+        if (response.data) {
+          students = response.data as SoWeSignStudent[];
           return students.filter((student) => !this.toIgnoreStudents.includes(student.reference));
         }
       }
