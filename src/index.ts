@@ -25,10 +25,10 @@ export class SoWeSign {
     ).data;
     if (tempToken && tempToken.token && tempToken.type) {
       this.temporaryToken = `${tempToken.type} ${tempToken.token}`;
-      console.log('Got token', this.temporaryToken);
+      // console.log('Got token', this.temporaryToken);
     } else {
-      console.log('Could not get token');
-      console.log(tempToken);
+      // console.log('Could not get token');
+      // console.log(tempToken);
     }
   }
   getAccessToken() {
@@ -60,7 +60,7 @@ export class SoWeSign {
         }
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       return `Error getting students: ${error}`;
     }
   }
