@@ -4,8 +4,6 @@ This package allows connection with the sowesign api. This is not an official pa
 
 # Usage
 
-StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
-
 ## Init
 
 ```
