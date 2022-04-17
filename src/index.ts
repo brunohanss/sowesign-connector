@@ -1,10 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { all, Student } from './students/student';
 
 export class SoWeSign {
   private token: string;
   private temporaryToken: string | undefined;
   private baseUrl: string = 'https://app.sowesign.com/api';
   private toIgnoreStudents: string[] = [];
+  private students = new Student(this);
 
   constructor(token: string, temporaryToken: string) {
     this.token = token;
@@ -28,6 +30,9 @@ export class SoWeSign {
       console.log('Could not get token');
       console.log(tempToken);
     }
+  }
+  getAccessToken() {
+    return { token: this.temporaryToken, baseUrl: this.baseUrl };
   }
 
   async getAllStudents() {
