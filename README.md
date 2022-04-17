@@ -1,4 +1,4 @@
-# SoWeSign Connector (
+# SoWeSign Connector
 
 This package allows connection with the sowesign api. This is not an official package from sowesign.
 
