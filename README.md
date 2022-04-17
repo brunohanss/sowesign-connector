@@ -59,12 +59,6 @@ Get all
 await soWeSign.trainers.getAll()
 ```
 
-Update or create
-
-```
-await soWeSign.trainers.updateOrCreate(student)
-```
-
 Delete
 
 ```
