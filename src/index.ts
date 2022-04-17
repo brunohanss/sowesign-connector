@@ -1,15 +1,35 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { all, Student } from './students/student';
+import { SoWeSignStudent, Student } from './students/student';
+import { Third } from './thirds/thirds';
+import { Trainer } from './trainers/trainer';
 
 export class SoWeSign {
-  private token: string;
+  private token: string | undefined;
   private temporaryToken: string | undefined;
+  private lastTokenDate: Date | undefined;
   private baseUrl: string = 'https://app.sowesign.com/api';
   private toIgnoreStudents: string[] = [];
   private students = new Student(this);
+  private trainers = new Trainer(this);
+  private thirds = new Third(this);
 
-  constructor(token: string, temporaryToken: string) {
+  /**
+   * @description Inits the SoWeSign class with the token and baseUrl
+   * @param token Token to use to get the temporary token
+   * @param baseUrl Base url of the SoWeSign api
+   */
+  async initialize(token: string, baseUrl?: string) {
     this.token = token;
+    this.baseUrl = baseUrl || this.baseUrl;
+    await this.getTemporaryToken();
+    this.lastTokenDate = new Date();
+
+    return this;
+  }
+  async tokenValidityCheck(date1: Date, date2: Date) {
+    if (Math.abs(date1.getTime() - date2.getTime()) / 36e5 > 22) {
+      await this.getTemporaryToken();
+    }
   }
 
   async getTemporaryToken() {
@@ -32,93 +52,63 @@ export class SoWeSign {
     }
   }
   getAccessToken() {
+    this.tokenValidityCheck(new Date(), this.lastTokenDate || new Date());
     return { token: this.temporaryToken, baseUrl: this.baseUrl };
-  }
-
-  async getAllStudents() {
-    try {
-      if (!this.temporaryToken) {
-        return 'Invalid temporary token';
-      }
-
-      let response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
-        headers: { Authorization: this.temporaryToken },
-      });
-      let students: SoWeSignStudent[] = [];
-      if (response.data) {
-        students = response.data as SoWeSignStudent[];
-        return students;
-      } else {
-        await this.getTemporaryToken();
-        await wait(1000 * 5);
-        response = await axios.get(`${this.baseUrl}/connectors/students`, {
-          headers: { Authorization: this.temporaryToken },
-        });
-        students = [];
-        if (response.data) {
-          students = response.data as SoWeSignStudent[];
-          return students.filter((student) => !this.toIgnoreStudents.includes(student.reference));
-        }
-      }
-    } catch (error: any) {
-      // console.log(error);
-      return `Error getting students: ${error}`;
-    }
   }
 }
 
 export const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-interface SoWeSignStudent {
-  reference: string;
-  gender: 'm' | 'f';
-  lastName: string;
-  firstName: string;
-  birthDate: string;
-  email: string;
-  mobilePhone: string;
-  phone: string;
-  start: string;
-  end: string;
-  data: {
-    data1: string;
-    data2: string;
-    data3: string;
-    data4: string;
-    data5: string;
-    data6: string;
-    data7: string;
-    data8: string;
-    dataJson: any;
-    region: string;
-    erp: any;
-    bi: any;
-    cfa: any;
-  };
-  address: {
-    addressLine1: any;
-    addressLine2: any;
-    addressLine3: any;
-    addressLine4: any;
-    zipcode: any;
-    city: any;
-    state: any;
-    country: any;
-  };
-  employer: any;
-  thirds: [];
-  financers: [];
-  opcaNumber: any;
-  regionNumber: any;
-  unemployedNumber: any;
-  fileNumber: string;
-  biNumber: any;
-  cfaNumber: any;
-  training: string;
-  degree: string;
-  corporate: any;
-  ssoUid: any;
-  requiredSignature: boolean;
-  typeRegion: any;
-  weeklyEnterprise: any;
-  nationalIdentity: any;
-}
+// interface SoWeSignStudent {
+//   reference: string;
+//   gender: 'm' | 'f';
+//   lastName: string;
+//   firstName: string;
+//   birthDate: string;
+//   email: string;
+//   mobilePhone: string;
+//   phone: string;
+//   start: string;
+//   end: string;
+//   data: {
+//     data1: string;
+//     data2: string;
+//     data3: string;
+//     data4: string;
+//     data5: string;
+//     data6: string;
+//     data7: string;
+//     data8: string;
+//     dataJson: any;
+//     region: string;
+//     erp: any;
+//     bi: any;
+//     cfa: any;
+//   };
+//   address: {
+//     addressLine1: any;
+//     addressLine2: any;
+//     addressLine3: any;
+//     addressLine4: any;
+//     zipcode: any;
+//     city: any;
+//     state: any;
+//     country: any;
+//   };
+//   employer: any;
+//   thirds: [];
+//   financers: [];
+//   opcaNumber: any;
+//   regionNumber: any;
+//   unemployedNumber: any;
+//   fileNumber: string;
+//   biNumber: any;
+//   cfaNumber: any;
+//   training: string;
+//   degree: string;
+//   corporate: any;
+//   ssoUid: any;
+//   requiredSignature: boolean;
+//   typeRegion: any;
+//   weeklyEnterprise: any;
+//   nationalIdentity: any;
+// }
