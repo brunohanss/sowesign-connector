@@ -40,7 +40,8 @@ export class SoWeSign {
       if (!this.temporaryToken) {
         return 'Invalid temporary token';
       }
-      const response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
+
+      let response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
         headers: { Authorization: this.temporaryToken },
       });
       let students: SoWeSignStudent[] = [];
@@ -50,10 +51,10 @@ export class SoWeSign {
       } else {
         await this.getTemporaryToken();
         await wait(1000 * 5);
-        const response: AxiosResponse = await axios.get(`${this.baseUrl}/connectors/students`, {
+        response = await axios.get(`${this.baseUrl}/connectors/students`, {
           headers: { Authorization: this.temporaryToken },
         });
-        let students: SoWeSignStudent[] = [];
+        students = [];
         if (response.data) {
           students = response.data as SoWeSignStudent[];
           return students.filter((student) => !this.toIgnoreStudents.includes(student.reference));
