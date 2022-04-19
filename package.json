@@ -1,9 +1,13 @@
 {
   "name": "sowesign-connector",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "main": "index.js",
   "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brunohanss/sowesign-connector.git"
+  },
   "scripts": {
     "test": "",
     "build": "tsc",

@@ -8,7 +8,7 @@ This package allows connection with the sowesign api. This is not an official pa
 
 ```
 import { SoWeSign } from  "sowesign-connector/lib";
-export const soWeSign = await this.connect.initialize(<TOKEN>, <BASE-URL>)
+export const soWeSign = await new SoWeSign().initialize(<TOKEN>, <BASE-URL>)
 ```
 
 ## Students
