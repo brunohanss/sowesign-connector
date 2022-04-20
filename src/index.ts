@@ -9,14 +9,14 @@ export class SoWeSign {
   private lastTokenDate: Date | undefined;
   private baseUrl: string = 'https://app.sowesign.com/api';
   private toIgnoreStudents: string[] = [];
-  private students = new Student(this);
-  private trainers = new Trainer(this);
-  private thirds = new Third(this);
+  public students = new Student(this);
+  public trainers = new Trainer(this);
+  public thirds = new Third(this);
 
   /**
    * @description Inits the SoWeSign class with the token and baseUrl
-   * @param token Token to use to get the temporary token
-   * @param baseUrl Base url of the SoWeSign api
+   * @param token Token to use to get the temporary token. Example : https://app.sowesign.com/api
+   * @param baseUrl Base url of the SoWeSign api. Example : API TOOOOOOOOKKKKKKKKKENNNNNNNNNNNNNN
    */
   async initialize(token: string, baseUrl?: string) {
     this.token = token;
